@@ -37,22 +37,22 @@ function schedule(
     # TCMB
     constraints = get_constraints(batch)
 
+    # convert order_time to epoch sec
+    t0 = Int64(Dates.datetime2epochms(order_time) / 1000)
+
     # scheduled operations
     scheduled_operations = vcat([job.operations for job in scheduled_jobs]...)
     N_prime = length(scheduled_operations)
     tau_prime = [op.tau for op in scheduled_operations]
-    S_prime = [op.S for op in scheduled_operations]
+    S_prime = [op.S - t0 for op in scheduled_operations]
     E_prime = [op.E for op in scheduled_operations]
-
-    # convert order_time to epoch sec.
-    t0 = Int64(Dates.datetime2epochms(order_time) / 1000)
 
     ################
     # Variables
     ################
 
     # start time
-    @variable(scheduler, S[1:N] >= t0)
+    @variable(scheduler, S[1:N] >= 0)
 
     # binary notation of which machine to process an operation
     F = Dict()
@@ -203,8 +203,8 @@ function schedule(
     # Out
     ################
 
-    # Time satrt and time end
-    S = [Int64(round(JuMP.value(S[a]))) for a = 1:N] # rounding might cause bug in the future
+    # Time to start each operation
+    S = [Int64(round(JuMP.value(S[a]))) + t0 for a = 1:N] # rounding might cause bug in the future
 
     # Machines selected for each operation
     E = zeros(Int64, N)
@@ -218,5 +218,5 @@ function schedule(
 
     append!(scheduled_jobs, batch.jobs)
 
-    return JuMP.value(Omega) - t0
+    return JuMP.value(Omega)
 end
