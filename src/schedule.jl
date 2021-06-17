@@ -203,10 +203,6 @@ function schedule(
     # Out
     ################
 
-    JuMP.termination_status(scheduler)
-    JuMP.primal_status(scheduler)
-    JuMP.objective_value(scheduler)
-
     # Time satrt and time end
     S = [Int64(round(JuMP.value(S[a]))) for a = 1:N] # rounding might cause bug in the future
 
