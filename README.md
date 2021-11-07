@@ -98,4 +98,4 @@ You can shorten this runtime overhead by "pre-compiling" the program.
         ```
 
 ## References
-[1] Itoh, TD. and Horinouchi, T., _et al_., "Optimal scheduling for laboratory automation of life science experiments with time constraints", _submitted_.
+[1] Itoh, TD. and Horinouchi, T., _et al_., "Optimal scheduling for laboratory automation of life science experiments with time constraints", _SLAS Technology_, 2021.
