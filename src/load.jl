@@ -1,21 +1,21 @@
 function load_case(case_path::String)
     # config
-    df_config = CSV.read(joinpath(case_path, "config.tsv"), DataFrame, delim = "\t")
+    df_config = CSV.read(joinpath(case_path, "config.tsv"), DataFrame, delim = "\t", stringtype=String)
     n_job = df_config[1, "N_job"]
     is_sequential = df_config[1, "Sequential"] == 1
     plot_range = df_config[1, "Plot_range"]
 
     # machines
-    df_machines = CSV.read(joinpath(case_path, "machines.tsv"), DataFrame, delim = "\t")
+    df_machines = CSV.read(joinpath(case_path, "machines.tsv"), DataFrame, delim = "\t", stringtype=String)
     machines = Vector{Machine}()
     for i = 1:size(df_machines)[1]
         push!(machines, Machine(i, df_machines[i, :Machine_type], df_machines[i, :Machine_name]))
     end
 
     # job definitions
-    df_operations = CSV.read(joinpath(case_path, "operations.tsv"), DataFrame, delim = "\t")
-    df_dependency = CSV.read(joinpath(case_path, "dependency.tsv"), DataFrame, delim = "\t")
-    df_tcmb = CSV.read(joinpath(case_path, "tcmb.tsv"), DataFrame, delim = "\t")
+    df_operations = CSV.read(joinpath(case_path, "operations.tsv"), DataFrame, delim = "\t", stringtype=String)
+    df_dependency = CSV.read(joinpath(case_path, "dependency.tsv"), DataFrame, delim = "\t", stringtype=String)
+    df_tcmb = CSV.read(joinpath(case_path, "tcmb.tsv"), DataFrame, delim = "\t", stringtype=String)
 
     jobs = [Job(job_id, [], [], []) for job_id = 1:n_job]
 
